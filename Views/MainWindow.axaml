@@ -9,31 +9,32 @@
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="PasswordManager">
+	
+	<Grid RowDefinitions="50, * , 30">
+		<TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" >Password Manager</TextBlock>
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-	<DockPanel LastChildFill="True">
-		<TextBlock DockPanel.Dock="Top" HorizontalAlignment="Center" >Password Manager v0.2</TextBlock>
-		<TextBlock DockPanel.Dock="Bottom" HorizontalAlignment="Center">© Matheuzinho Solucoes 2024</TextBlock>
-		<StackPanel>
-			<TextBlock HorizontalAlignment="Center" Margin="0, 20" FontSize="20">Criar senha</TextBlock>
-			<Grid 
-				HorizontalAlignment="Center" 
-				ShowGridLines="False" 
-				ColumnDefinitions="auto, auto" 
-				RowDefinitions="auto, auto" 
-			>
-				<Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right">Nome</Label>
-				<TextBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="250" Watermark="Digite o nome do site ou programa" Text="{Binding Name}"/>
-				<Label Margin="0, 5" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right">Senha</Label>
-				<TextBox Margin="0, 5" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="250" Watermark="Digite a senha" Text="{Binding Password}" PasswordChar="*"/>
+		<StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="50, 0">
+			<TextBlock FontSize="22" Margin="0, 15" HorizontalAlignment="Center">
+				Criar Senha
+			</TextBlock>
+			
+			<Grid  RowDefinitions="30, 15, 30" ColumnDefinitions="Auto, 15, *">
+				<Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Nome do programa: </Label>
+				<TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Name}"/>
+				<Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Senha:</Label>
+				<TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Password}"/>
 			</Grid>
-				<Button HorizontalAlignment="Center" Command="{Binding savePasswordCommand}">
-					Salvar
-				</Button>
+
+			<StackPanel Spacing="20" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 30">
+				<Button Background="Aqua">Salvar</Button>
+				<Button Background="Red"> Cancelar</Button>
+			</StackPanel>
 		</StackPanel>
-	</DockPanel>
+		
+		<TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+			<Run Text="©"/>
+			<Run Text="{Binding CurrentYear}"/>
+			<Run Text="- MatheuzinhoSoluções"/>
+		</TextBlock>
+	</Grid>
 </Window>
