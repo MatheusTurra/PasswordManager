@@ -3,30 +3,48 @@
         xmlns:vm="using:PasswordManager.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="450"
-		Width="450" Height="450"
+        mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="650"
+		Width="650" Height="650"
         x:Class="PasswordManager.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="PasswordManager">
-	
+	<Design.DataContext>
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
 	<Grid RowDefinitions="50, * , 30">
 		<TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" >Password Manager</TextBlock>
 
-		<StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="50, 0">
+		<StackPanel Grid.Row="1" Spacing="20" VerticalAlignment="Center" Margin="50, 0">
 			<TextBlock FontSize="22" Margin="0, 15" HorizontalAlignment="Center">
 				Criar Senha
 			</TextBlock>
 			
-			<Grid  RowDefinitions="30, 15, 30" ColumnDefinitions="Auto, 15, *">
-				<Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Nome do programa: </Label>
-				<TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Name}"/>
-				<Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Senha:</Label>
-				<TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Password}"/>
+			<Grid  RowDefinitions="30, 65, 30, 45, 30, 45, 30" ColumnDefinitions="Auto, 5, *">
+				<Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Nome: </Label>
+				<StackPanel Grid.Row="0" Grid.Column="2">
+					<TextBox Text="{Binding Name}"/>
+				</StackPanel>
+
+				<Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Usuario:</Label>
+				<StackPanel Grid.Row="2" Grid.Column="2" >
+					<TextBox HorizontalContentAlignment="Stretch" Text="{Binding User}"/>
+				</StackPanel>
+
+				<Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Senha:</Label>
+				<StackPanel Grid.Row="4" Grid.Column="2" >
+					<TextBox HorizontalContentAlignment="Stretch" Text="{Binding Password}"/>
+				</StackPanel>
+
+				<Label Grid.Row="6" Grid.Column="0" VerticalAlignment="Center">Repetir Senha:</Label>
+				<StackPanel Grid.Row="6" Grid.Column="2" >
+					<TextBox HorizontalContentAlignment="Stretch" Text="{Binding RepeatPassword}"/>
+				</StackPanel>
+
 			</Grid>
 
 			<StackPanel Spacing="20" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 30">
-				<Button Background="Aqua">Salvar</Button>
+				<Button Background="Aqua" Command="{Binding savePasswordCommand}">Salvar</Button>
 				<Button Background="Red"> Cancelar</Button>
 			</StackPanel>
 		</StackPanel>
