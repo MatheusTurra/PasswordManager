@@ -3,6 +3,7 @@ using Avalonia.Rendering;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PasswordManager.Models;
+using PasswordManager.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -59,17 +60,10 @@ public partial class MainWindowViewModel : ObservableValidator
 
             string fileName = RemoveSpecialCharacters(Name);
             string passwordFilePath = System.IO.Path.Combine(passwordsFolder, fileName+".pwd");
-            if (File.Exists(passwordFilePath))
-            {
-                //TODO: LER ARQUIVO E VERIFICAR SE A SENHA JA EXISTE
-                //TODO: SALVAR ARQUIVO COM O NOME DO SITE DA SENHA
-                Password password = createPassword();
-                writePasswordToFile(passwordFilePath, password);
-            } 
-            else
-            {
-                savePasswordInNewFile(passwordFilePath);
-            }
+
+            string jsonPassword = createPasswordAsJson();
+
+            getFileManager().createNewFile(passwordFilePath, jsonPassword);
 
             Debug.WriteLine(passwordsFolder);
         }
@@ -81,16 +75,6 @@ public partial class MainWindowViewModel : ObservableValidator
         {
             string jsonPassword = JsonSerializer.Serialize(createPassword());
             file.WriteLine(jsonPassword);
-        }
-    }
-
-    private void savePasswordInNewFile(string filePath)
-    {
-        using (FileStream file = File.Create(filePath))
-        {
-            string passwordJson = createPasswordAsJson();
-            byte[] writablePassword = new UTF8Encoding(true).GetBytes("[" + passwordJson + "]");
-            file.Write(writablePassword);
         }
     }
 
@@ -113,5 +97,10 @@ public partial class MainWindowViewModel : ObservableValidator
     private string RemoveSpecialCharacters(string str)
     {
         return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled).ToLower();
+    }
+
+    protected FileManager getFileManager()
+    {
+        return new FileManager();
     }
 }
