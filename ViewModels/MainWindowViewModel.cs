@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls.Shapes;
+﻿using Avalonia.Animation;
+using Avalonia.Controls.Shapes;
 using Avalonia.Rendering;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -101,5 +102,10 @@ public partial class MainWindowViewModel : ObservableValidator
     protected FileManager getFileManager()
     {
         return new FileManager();
+    }
+
+    public int nunitTest(int num1, int num2)
+    {
+        return num1 + num2;
     }
 }
