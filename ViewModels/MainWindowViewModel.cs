@@ -11,6 +11,7 @@ using System.IO;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace PasswordManager.ViewModels;
 
@@ -56,8 +57,8 @@ public partial class MainWindowViewModel : ObservableValidator
                 Directory.CreateDirectory(passwordsFolder);
             }
 
-
-            string passwordFilePath = System.IO.Path.Combine(passwordsFolder, "file.txt");
+            string fileName = RemoveSpecialCharacters(Name);
+            string passwordFilePath = System.IO.Path.Combine(passwordsFolder, fileName+".pwd");
             if (File.Exists(passwordFilePath))
             {
                 //TODO: LER ARQUIVO E VERIFICAR SE A SENHA JA EXISTE
@@ -107,5 +108,10 @@ public partial class MainWindowViewModel : ObservableValidator
     private string createPasswordAsJson()
     {
         return JsonSerializer.Serialize(createPassword());
+    }
+
+    private string RemoveSpecialCharacters(string str)
+    {
+        return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled).ToLower();
     }
 }
