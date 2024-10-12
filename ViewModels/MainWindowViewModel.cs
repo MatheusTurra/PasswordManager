@@ -86,9 +86,16 @@ public partial class MainWindowViewModel : ObservableValidator
         return JsonSerializer.Serialize(createPassword());
     }
 
-    private string RemoveSpecialCharacters(string str)
+    private string RemoveSpecialCharacters(string? str)
     {
-        return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled).ToLower();
+        string result = "";
+
+        if (str != null)
+        {
+            result = Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled).ToLower();
+        }
+
+        return result;
     }
 
     protected FileManager getFileManager()
