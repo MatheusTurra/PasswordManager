@@ -17,5 +17,26 @@ namespace PasswordManager.Service
                 file.Write(writableContent);
             }
         }
+
+        public void createDirectory(string DirectoryPath)
+        {
+            if (!Directory.Exists(DirectoryPath))
+            {
+                Directory.CreateDirectory(DirectoryPath);
+            }
+        }
+
+        public string getProjectRootDirectory() 
+        {
+            string workingDirectory = Environment.CurrentDirectory;
+            string? projectRootDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent?.FullName;
+
+            if (projectRootDirectory == null)
+            {
+                throw new Exception();
+            }
+
+            return projectRootDirectory;
+        }
     }
 }

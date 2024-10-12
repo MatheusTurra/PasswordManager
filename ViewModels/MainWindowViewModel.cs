@@ -45,28 +45,20 @@ public partial class MainWindowViewModel : ObservableValidator
     {
         ValidateAllProperties();
 
+        string projectRootDirectory = getFileManager().getProjectRootDirectory();
+        string passwordsFolder = projectRootDirectory + "/Assets/Passwords";
 
-        string workingDirectory = Environment.CurrentDirectory;
-        string? projectRootDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent?.FullName;
+        getFileManager().createDirectory(passwordsFolder);
 
-        if (projectRootDirectory != null)
-        {
-            string passwordsFolder = projectRootDirectory + "/Assets/Passwords";
+        string fileName = RemoveSpecialCharacters(Name);
+        string passwordFilePath = System.IO.Path.Combine(passwordsFolder, fileName+".pwd");
 
-            if (!Directory.Exists(passwordsFolder))
-            {
-                Directory.CreateDirectory(passwordsFolder);
-            }
+        string jsonPassword = createPasswordAsJson();
 
-            string fileName = RemoveSpecialCharacters(Name);
-            string passwordFilePath = System.IO.Path.Combine(passwordsFolder, fileName+".pwd");
+        getFileManager().createNewFile(passwordFilePath, jsonPassword);
 
-            string jsonPassword = createPasswordAsJson();
-
-            getFileManager().createNewFile(passwordFilePath, jsonPassword);
-
-            Debug.WriteLine(passwordsFolder);
-        }
+        Debug.WriteLine(passwordsFolder);
+        
     }
 
     private void writePasswordToFile(string filePath, Password password)
