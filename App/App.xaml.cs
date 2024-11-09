@@ -1,12 +1,19 @@
-﻿namespace App
+﻿
+namespace App
 {
     public partial class App : Application
     {
         public App()
         {
             InitializeComponent();
+        }
 
-            MainPage = new AppShell();
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            Window fixedSizeWindow = new Window(new AppShell());
+            fixedSizeWindow.MaximumWidth = 700;
+            fixedSizeWindow.MaximumHeight = 700;
+            return fixedSizeWindow;
         }
     }
 }

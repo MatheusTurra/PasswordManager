@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace App.ViewModels
 {
-    partial class MainViewModel: ObservableValidator
+    partial class MainPageViewModel: ObservableValidator
     {
         [Required(ErrorMessage = "Digite o nome do programa ou site")]
         [MinLength(2, ErrorMessage = "O nome do site ou programa deve conter mais de dois caracteres")]
