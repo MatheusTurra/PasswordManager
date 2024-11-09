@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:App.ViewModels"
+             x:DataType="local:MainPageViewModel"
+             x:Class="App.MainPage">
+    <ContentPage.BindingContext>
+        <local:MainPageViewModel/>
+    </ContentPage.BindingContext>
+
+    <Grid HorizontalOptions="FillAndExpand" Margin="30, 0" RowDefinitions="50, *, 50">
+        <Label Grid.Row="0" VerticalTextAlignment="Start" HorizontalTextAlignment="Center">Criar Senha</Label>
+        <VerticalStackLayout Grid.Row="1" Spacing="15">
+            <Label Text="Nome" FontSize="Medium" />
+            <Entry Placeholder="Digite seu nome" />
+
+            <Label Text="Usuário" FontSize="Medium" />
+            <Entry Placeholder="Digite seu usuário" />
+
+            <Label Text="Senha" FontSize="Medium" />
+            <Entry Placeholder="Digite sua senha" IsPassword="True" />
+
+            <Label Text="Repetir Senha" FontSize="Medium" />
+            <Entry Placeholder="Repita sua senha" IsPassword="True" />
+            <HorizontalStackLayout Margin="0, 20" HorizontalOptions="Center">
+                <Button Text="Salvar"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+        <Label Grid.Row="2" Margin="0, 0, 0, 10" VerticalTextAlignment="End" HorizontalTextAlignment="Center">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="© "/>
+                    <Span Text="{Binding CurrentYear}"/>
+                    <Span Text=" MatheuzinhoSoluções"/>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+    </Grid>
+
+    <!--<Label Text="{Binding Source={x:Reference slider},
+                      Path=Value,
+                      StringFormat='The slider value is {0:F2}'}" />-->
+</ContentPage>
