@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace App.ViewModels
 {
-    partial class MainPageViewModel: ObservableValidator
+    public partial class MainPageViewModel: ObservableValidator
     {
         [Required(ErrorMessage = "Digite o nome do programa ou site")]
         [MinLength(2, ErrorMessage = "O nome do site ou programa deve conter mais de dois caracteres")]
@@ -84,6 +84,11 @@ namespace App.ViewModels
         protected FileService getFileService()
         {
             return new FileService();
+        }
+
+        public string unitTest()
+        {
+            return "TODO: Unit tests";
         }
     }
 }

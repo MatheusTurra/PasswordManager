@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Services
 {
-    class FileService
+    public class FileService
     {
         public void createNewFile(string filePath, string fileContent)
         {
