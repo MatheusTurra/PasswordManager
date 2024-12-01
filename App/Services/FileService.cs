@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Services
 {
-    public class FileService
+    public class FileService : IFileService
     {
         public void createNewFile(string filePath, string fileContent)
         {
@@ -27,15 +27,13 @@ namespace App.Services
 
         public string getProjectRootDirectory()
         {
-            string workingDirectory = Environment.CurrentDirectory;
-            string? projectRootDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent?.FullName;
-
-            if (projectRootDirectory == null)
+            string appDataDirectory = FileSystem.Current.AppDataDirectory;
+            if (appDataDirectory == null)
             {
                 throw new Exception();
             }
 
-            return projectRootDirectory;
+            return appDataDirectory;
         }
     }
 

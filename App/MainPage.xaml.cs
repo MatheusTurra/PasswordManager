@@ -1,10 +1,13 @@
-﻿namespace App
+﻿using App.ViewModels;
+
+namespace App
 {
     public partial class MainPage : ContentPage
     {
-        public MainPage()
+        public MainPage(MainPageViewModel mainPageViewModel)
         {
             InitializeComponent();
+            BindingContext = mainPageViewModel;
         }
     }
 }

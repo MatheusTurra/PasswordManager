@@ -4,9 +4,7 @@
              xmlns:local="clr-namespace:App.ViewModels"
              x:DataType="local:MainPageViewModel"
              x:Class="App.MainPage">
-    <ContentPage.BindingContext>
-        <local:MainPageViewModel/>
-    </ContentPage.BindingContext>
+
 
     <Grid HorizontalOptions="FillAndExpand" Margin="30, 0" RowDefinitions="50, *, 50">
         <Label Grid.Row="0" VerticalTextAlignment="Start" HorizontalTextAlignment="Center">Criar Senha</Label>
@@ -23,7 +21,7 @@
             <Label Text="Repetir Senha" FontSize="Medium" />
             <Entry Placeholder="Repita sua senha" IsPassword="True" />
             <HorizontalStackLayout Margin="0, 20" HorizontalOptions="Center">
-                <Button Text="Salvar"/>
+                <Button Text="Salvar" Command="{Binding savePasswordCommand}"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
         <Label Grid.Row="2" Margin="0, 0, 0, 10" VerticalTextAlignment="End" HorizontalTextAlignment="Center">

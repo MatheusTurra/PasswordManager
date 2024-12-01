@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace App.ViewModels
 {
-    public partial class MainPageViewModel: ObservableValidator
+    public partial class MainPageViewModel : ObservableValidator
     {
         [Required(ErrorMessage = "Digite o nome do programa ou site")]
         [MinLength(2, ErrorMessage = "O nome do site ou programa deve conter mais de dois caracteres")]
@@ -33,26 +33,35 @@ namespace App.ViewModels
 
         public string CurrentYear { get => DateTime.Now.Year.ToString(); }
 
+        private IFileService _fileService;
+        public MainPageViewModel(IFileService fileService)
+        { 
+            _fileService = fileService;
+        }
+        
         [RelayCommand]
         private void savePassword()
         {
             ValidateAllProperties();
+            
+            CreatePasswordFile();
+        }
 
-            string projectRootDirectory = getFileService().getProjectRootDirectory();
+        public void CreatePasswordFile()
+        {
+            string projectRootDirectory = _fileService.getProjectRootDirectory();
             string passwordsFolder = projectRootDirectory + "/Assets/Passwords";
 
-            getFileService().createDirectory(passwordsFolder);
+            _fileService.createDirectory(passwordsFolder);
 
             string fileName = RemoveSpecialCharacters(Name);
             string passwordFilePath = System.IO.Path.Combine(passwordsFolder, fileName + ".pwd");
 
             string jsonPassword = createPasswordAsJson();
 
-            getFileService().createNewFile(passwordFilePath, jsonPassword);
-
-            Debug.WriteLine(passwordsFolder);
+            _fileService.createNewFile(passwordFilePath, jsonPassword);
         }
-        
+
         private Password createPassword()
         {
             return new Password()
@@ -79,16 +88,6 @@ namespace App.ViewModels
             }
 
             return result;
-        }
-
-        protected FileService getFileService()
-        {
-            return new FileService();
-        }
-
-        public string unitTest()
-        {
-            return "TODO: Unit tests";
         }
     }
 }
