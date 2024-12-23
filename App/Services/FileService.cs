@@ -8,7 +8,7 @@ namespace App.Services
 {
     public class FileService : IFileService
     {
-        public void createNewFile(string filePath, string fileContent)
+        public void CreateNewFile(string filePath, string fileContent)
         {
             using (FileStream file = File.Create(filePath))
             {
@@ -17,7 +17,7 @@ namespace App.Services
             }
         }
 
-        public void createDirectory(string DirectoryPath)
+        public void CreateDirectory(string DirectoryPath)
         {
             if (!Directory.Exists(DirectoryPath))
             {
@@ -25,7 +25,7 @@ namespace App.Services
             }
         }
 
-        public string getProjectRootDirectory()
+        public string GetProjectRootDirectory()
         {
             string appDataDirectory = FileSystem.Current.AppDataDirectory;
             if (appDataDirectory == null)

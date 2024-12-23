@@ -49,17 +49,17 @@ namespace App.ViewModels
 
         public void CreatePasswordFile()
         {
-            string projectRootDirectory = _fileService.getProjectRootDirectory();
+            string projectRootDirectory = _fileService.GetProjectRootDirectory();
             string passwordsFolder = projectRootDirectory + "/Assets/Passwords";
 
-            _fileService.createDirectory(passwordsFolder);
+            _fileService.CreateDirectory(passwordsFolder);
 
             string fileName = RemoveSpecialCharacters(Name);
             string passwordFilePath = System.IO.Path.Combine(passwordsFolder, fileName + ".pwd");
 
             string jsonPassword = createPasswordAsJson();
 
-            _fileService.createNewFile(passwordFilePath, jsonPassword);
+            _fileService.CreateNewFile(passwordFilePath, jsonPassword);
         }
 
         private Password createPassword()

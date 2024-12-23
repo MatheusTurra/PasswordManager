@@ -2,8 +2,8 @@
 {
     public interface IFileService
     {
-        void createDirectory(string DirectoryPath);
-        void createNewFile(string filePath, string fileContent);
-        string getProjectRootDirectory();
+        void CreateDirectory(string DirectoryPath);
+        void CreateNewFile(string filePath, string fileContent);
+        string GetProjectRootDirectory();
     }
 }
