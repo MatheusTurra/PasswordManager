@@ -29,7 +29,7 @@ namespace Tests.Unit.ViewModels
         }
 
         [TestMethod]
-        public void SavePassword_PasswordFileIsCreatedWithoutSpecialCharacters()
+        public void SavePassword_FileIsCreatedWithoutSpecialCharacters()
         {
             //ARRANGE
             var fileService = new Mock<IFileService>();
@@ -39,7 +39,7 @@ namespace Tests.Unit.ViewModels
                 .Callback<string, string>((filePath, fileContent) => createNewFilePathParameter = filePath);
 
             var mainPage = new MainPageViewModel(fileService.Object);
-            mainPage.Name = "unitTést!";
+            mainPage.Name = "unitTéstSpecíãlCharactêrs!";
 
             //ACT
             mainPage.CreatePasswordFile();
@@ -50,5 +50,26 @@ namespace Tests.Unit.ViewModels
             Assert.IsTrue(nameContainsOnlyAlphanumeric);
         }
 
+
+        [TestMethod]
+        public void SavePassword_FileIsCreatedWithCorrectExtension()
+        {
+            //ARRANGE
+            var fileService = new Mock<IFileService>();
+            
+            string createNewFilePathParameter = "";
+            fileService.Setup(fs => fs.CreateNewFile(It.IsAny<string>(), It.IsAny<string>()))
+                .Callback<string, string>((filePath, fileContent) => createNewFilePathParameter = filePath);
+
+            //ACT
+            var mainPage = new MainPageViewModel(fileService.Object);
+            mainPage.Name = "unitTestFileExtension";
+
+            mainPage.CreatePasswordFile();
+
+            //ASSERT
+            string fileName = Path.GetExtension(createNewFilePathParameter);
+            Assert.AreEqual(fileName, ".pwd");
+        }
     }
 }
