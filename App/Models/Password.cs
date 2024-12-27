@@ -1,6 +1,6 @@
 ﻿namespace App.Models
 {
-    class Password
+    public class Password
     {
         public string? name { get; set; }
         public string? user { get; set; }

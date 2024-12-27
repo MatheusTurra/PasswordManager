@@ -1,6 +1,9 @@
 ﻿using App.Services;
 using App.ViewModels;
+using App.Models;
 using Moq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Tests.Unit.ViewModels
 {
@@ -9,7 +12,6 @@ namespace Tests.Unit.ViewModels
     {
 
 
-        //TODO: CRIAR NOVOS MOCKS AO EXECUTAR CADA METODO (PESQUISAR DECORATOR MSTESTS)
         [TestMethod]
         public void SavePassword_CreatesPasswordDirectory()
         {
@@ -50,7 +52,6 @@ namespace Tests.Unit.ViewModels
             Assert.IsTrue(nameContainsOnlyAlphanumeric);
         }
 
-
         [TestMethod]
         public void SavePassword_FileIsCreatedWithCorrectExtension()
         {
@@ -69,7 +70,36 @@ namespace Tests.Unit.ViewModels
 
             //ASSERT
             string fileName = Path.GetExtension(createNewFilePathParameter);
-            Assert.AreEqual(fileName, ".pwd");
+            Assert.AreEqual<string>(fileName, ".pwd");
+        }
+
+
+        [TestMethod]
+        public void SavePassword_JsonFileCreatedWithFormData()
+        {
+            //ARRANGE
+            var fileService = new Mock<IFileService>();
+            
+            string createNewFileJsonPasswordParameter = "";
+            fileService.Setup(fs => fs.CreateNewFile(It.IsAny<string>(), It.IsAny<string>()))
+                .Callback<string, string>((filePath, fileContent) => createNewFileJsonPasswordParameter = fileContent);
+
+            var mainPage = new MainPageViewModel(fileService.Object);
+            mainPage.Name = "SiteNameUnitTest";
+            mainPage.User = "userUnitTest";
+            mainPage.Password = "passwordUnitTest";
+            mainPage.RepeatPassword = "passwordUnitTest";
+
+
+            //ACT
+            mainPage.CreatePasswordFile();
+
+            var jsonPassword = JsonConvert.DeserializeObject<Password>(createNewFileJsonPasswordParameter);
+            Assert.AreEqual<string>(mainPage.Name, jsonPassword?.name);
+            Assert.AreEqual<string>(mainPage.User, jsonPassword?.user);
+            Assert.AreEqual<string>(mainPage.Password, jsonPassword?.password);
+            Assert.AreEqual<string>(mainPage.RepeatPassword, jsonPassword?.repeatPassword);
+
         }
     }
 }

@@ -31,9 +31,9 @@ namespace App.ViewModels
         [ObservableProperty]
         private string? _repeatPassword = "";
 
-        public string CurrentYear { get => DateTime.Now.Year.ToString(); }
+        public static string CurrentYear { get => DateTime.Now.Year.ToString(); }
 
-        private IFileService _fileService;
+        private readonly IFileService _fileService;
         public MainPageViewModel(IFileService fileService)
         { 
             _fileService = fileService;
@@ -47,6 +47,7 @@ namespace App.ViewModels
             CreatePasswordFile();
         }
 
+        //TODO: VALIDATE IF THE TWO PASSWORDS ARE EQUAL
         public void CreatePasswordFile()
         {
             string projectRootDirectory = _fileService.GetProjectRootDirectory();
@@ -55,14 +56,14 @@ namespace App.ViewModels
             _fileService.CreateDirectory(passwordsFolder);
 
             string fileName = RemoveSpecialCharacters(Name);
-            string passwordFilePath = System.IO.Path.Combine(passwordsFolder, fileName + ".pwd");
+            string passwordFilePath = Path.Combine(passwordsFolder, fileName + ".pwd");
 
-            string jsonPassword = createPasswordAsJson();
+            string jsonPassword = CreatePasswordAsJson();
 
             _fileService.CreateNewFile(passwordFilePath, jsonPassword);
         }
 
-        private Password createPassword()
+        private Password CreatePassword()
         {
             return new Password()
             {
@@ -73,9 +74,9 @@ namespace App.ViewModels
             };
         }
 
-        private string createPasswordAsJson()
+        private string CreatePasswordAsJson()
         {
-            return JsonSerializer.Serialize(createPassword());
+            return JsonSerializer.Serialize(CreatePassword());
         }
 
         private string RemoveSpecialCharacters(string? str)
