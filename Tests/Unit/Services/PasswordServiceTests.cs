@@ -10,7 +10,7 @@ namespace Tests.Unit.Services
     public class PasswordServiceTests
     {
         [TestMethod]
-        public void SavePassword_CreatesPasswordDirectory()
+        public void     CreatesPasswordDirectory()
         {
             //ARRANGE
             string projectRootDirectory = "C://ProjectRoot/";
@@ -29,7 +29,7 @@ namespace Tests.Unit.Services
         }
 
         [TestMethod]
-        public void SavePassword_FileIsCreatedWithoutSpecialCharacters()
+        public void CreatePasswordFile_FileIsCreatedWithoutSpecialCharacters()
         {
             //ARRANGE
             var fileService = new Mock<IFileService>();
@@ -52,7 +52,7 @@ namespace Tests.Unit.Services
         }
 
         [TestMethod]
-        public void SavePassword_FileIsCreatedWithCorrectExtension()
+        public void CreatePasswordFile_FileIsCreatedWithCorrectExtension()
         {
             //ARRANGE
             var fileService = new Mock<IFileService>();
@@ -74,7 +74,7 @@ namespace Tests.Unit.Services
         }
 
         [TestMethod]
-        public void SavePassword_JsonFileCreatedWithFormData()
+        public void CreatePasswordFile_JsonFileCreatedWithFormData()
         {
             //ARRANGE
             var fileService = new Mock<IFileService>();
@@ -96,6 +96,20 @@ namespace Tests.Unit.Services
             Assert.AreEqual<string>(password.password, jsonPassword?.password);
             Assert.AreEqual<string>(password.repeatPassword, jsonPassword?.repeatPassword);
 
+        }
+
+        [TestMethod]
+        public void CreatePasswordFile_ThrowsExceptionIfPasswordsIsDifferent()
+        {
+            //ARRANGE
+            var fileService = new Mock<IFileService>();
+
+            Password password = getFakePassword();
+            password.repeatPassword = "differentPassword";
+
+            //ACT & ASSERT
+            PasswordService passwordService = new PasswordService(fileService.Object);
+            Assert.ThrowsException<Exception>(() => passwordService.CreatePasswordFile(password));
         }
 
         private Password getFakePassword()
