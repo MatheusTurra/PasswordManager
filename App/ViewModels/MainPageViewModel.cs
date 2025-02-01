@@ -33,10 +33,10 @@ namespace App.ViewModels
 
         public static string CurrentYear { get => DateTime.Now.Year.ToString(); }
 
-        private readonly IFileService _fileService;
-        public MainPageViewModel(IFileService fileService)
+        private readonly IPasswordService passwordService;
+        public MainPageViewModel(IPasswordService passwordService)
         { 
-            _fileService = fileService;
+            this.passwordService = passwordService;
         }
         
         [RelayCommand]
@@ -44,51 +44,15 @@ namespace App.ViewModels
         {
             ValidateAllProperties();
             
-            CreatePasswordFile();
-        }
-
-        //TODO: VALIDATE IF THE TWO PASSWORDS ARE EQUAL
-        public void CreatePasswordFile()
-        {
-            string projectRootDirectory = _fileService.GetProjectRootDirectory();
-            string passwordsFolder = projectRootDirectory + "/Assets/Passwords";
-
-            _fileService.CreateDirectory(passwordsFolder);
-
-            string fileName = RemoveSpecialCharacters(Name);
-            string passwordFilePath = Path.Combine(passwordsFolder, fileName + ".pwd");
-
-            string jsonPassword = CreatePasswordAsJson();
-
-            _fileService.CreateNewFile(passwordFilePath, jsonPassword);
-        }
-
-        private Password CreatePassword()
-        {
-            return new Password()
+            Password password = new Password()
             {
                 name = Name,
                 user = User,
                 password = Password,
                 repeatPassword = RepeatPassword
             };
-        }
 
-        private string CreatePasswordAsJson()
-        {
-            return JsonSerializer.Serialize(CreatePassword());
-        }
-
-        private string RemoveSpecialCharacters(string? str)
-        {
-            string result = "";
-
-            if (str != null)
-            {
-                result = Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled).ToLower();
-            }
-
-            return result;
+            passwordService.CreatePasswordFile(password);
         }
     }
 }

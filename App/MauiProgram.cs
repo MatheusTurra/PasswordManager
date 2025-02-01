@@ -25,6 +25,7 @@ namespace App
             builder.Services.AddSingleton<MainPageViewModel>();
 
             builder.Services.AddScoped<IFileService, FileService>();
+            builder.Services.AddScoped<IPasswordService, PasswordService>();
 
 #if DEBUG
             builder.Logging.AddDebug();
