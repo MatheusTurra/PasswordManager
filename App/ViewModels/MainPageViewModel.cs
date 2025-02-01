@@ -1,11 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using App.Services;
 using App.Models;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
+using App.Services.Interfaces;
 
 namespace App.ViewModels
 {
