@@ -21,6 +21,11 @@ namespace App.Services
 
         public void CreatePasswordFile(Password password)
         {
+            if (password.password != password.repeatPassword)
+            {
+                throw new Exception("As senhas são diferentes");
+            }
+
             string passwordsFolder = CreatePasswordsFolder();
             fileService.CreateDirectory(passwordsFolder);
 
