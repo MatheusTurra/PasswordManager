@@ -10,7 +10,7 @@ namespace App.Services.Interfaces
     public interface IPasswordService
     {
         void CreatePasswordFile(Password password);
-        string CreatePasswordsFolder();
+        string GetPasswordsFolder();
         string RemoveSpecialCharacters(string? str);
     }
 }

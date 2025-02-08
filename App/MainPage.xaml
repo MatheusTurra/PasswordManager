@@ -10,16 +10,16 @@
         <Label Grid.Row="0" VerticalTextAlignment="Start" HorizontalTextAlignment="Center">Criar Senha</Label>
         <VerticalStackLayout Grid.Row="1" Spacing="15">
             <Label Text="Nome" FontSize="Medium" />
-            <Entry Placeholder="Digite seu nome" />
+            <Entry Placeholder="Digite seu nome"  Text="{Binding Name}"/>
 
             <Label Text="Usuário" FontSize="Medium" />
-            <Entry Placeholder="Digite seu usuário" />
+            <Entry Placeholder="Digite seu usuário" Text="{Binding User}"/>
 
             <Label Text="Senha" FontSize="Medium" />
-            <Entry Placeholder="Digite sua senha" IsPassword="True" />
+            <Entry Placeholder="Digite sua senha" IsPassword="True" Text="{Binding Password}"/>
 
             <Label Text="Repetir Senha" FontSize="Medium" />
-            <Entry Placeholder="Repita sua senha" IsPassword="True" />
+            <Entry Placeholder="Repita sua senha" IsPassword="True" Text="{Binding RepeatPassword}"/>
             <HorizontalStackLayout Margin="0, 20" HorizontalOptions="Center">
                 <Button Text="Salvar" Command="{Binding savePasswordCommand}"/>
             </HorizontalStackLayout>
@@ -34,8 +34,4 @@
             </Label.FormattedText>
         </Label>
     </Grid>
-
-    <!--<Label Text="{Binding Source={x:Reference slider},
-                      Path=Value,
-                      StringFormat='The slider value is {0:F2}'}" />-->
 </ContentPage>

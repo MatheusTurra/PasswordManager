@@ -11,6 +11,7 @@ using App.Services.Interfaces;
 
 namespace App.Services
 {
+    //TODO: REMOVER CHAMADAS ESTATICAS PARA O SISTEMA DE ARQUIVOS PARA FAZER COM QUE OS TESTES NAO FACAM CHAMADAS EXTERNAS A APLICACAO
     public class PasswordService : IPasswordService
     {
         private readonly IFileService fileService;
@@ -26,8 +27,12 @@ namespace App.Services
                 throw new Exception("As senhas são diferentes");
             }
 
-            string passwordsFolder = CreatePasswordsFolder();
-            fileService.CreateDirectory(passwordsFolder);
+            string passwordsFolder = GetPasswordsFolder();
+
+            if (!Directory.Exists(passwordsFolder))
+            {
+                fileService.CreateDirectory(passwordsFolder);
+            }
 
             string fileName = RemoveSpecialCharacters(password.name);
             string passwordFilePath = Path.Combine(passwordsFolder, fileName + ".pwd");
@@ -37,10 +42,10 @@ namespace App.Services
             fileService.CreateNewFile(passwordFilePath, jsonPassword);
         }
 
-        public string CreatePasswordsFolder()
+        public string GetPasswordsFolder()
         {
             string projectRootDirectory = fileService.GetProjectRootDirectory();
-            return Path.Combine(projectRootDirectory, "/Passwords");
+            return Path.Combine(projectRootDirectory, "Passwords");
         }
 
 

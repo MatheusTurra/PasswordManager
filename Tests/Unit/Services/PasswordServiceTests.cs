@@ -10,7 +10,7 @@ namespace Tests.Unit.Services
     public class PasswordServiceTests
     {
         [TestMethod]
-        public void     CreatesPasswordDirectory()
+        public void CreatesPasswordDirectory()
         {
             //ARRANGE
             string projectRootDirectory = "C://ProjectRoot/";
