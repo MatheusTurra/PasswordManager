@@ -9,6 +9,7 @@ namespace Tests.Unit.Services
     [TestClass]
     public class PasswordServiceTests
     {
+        //TODO: CLASSES ESTATICAS FILESERVICE E DIRECTORY ESTAO CRIANDO PASTAS/ARQUIVOS AO SEREM EXECUTADAS NOS TESTES DE UNIDADE
         [TestMethod]
         public void CreatesPasswordDirectory()
         {
@@ -21,10 +22,10 @@ namespace Tests.Unit.Services
             Password password = getFakePassword();
             
             //ACT
-            passwordService.CreatePasswordFile(password);
+           passwordService.CreatePasswordFile(password);
 
-            //ASSERT
-            string expectedDirectoryPath = projectRootDirectory + "/Assets/Passwords";
+            //ASSERT 
+            string expectedDirectoryPath = projectRootDirectory + "Passwords";
             fileService.Verify(service => service.CreateDirectory(expectedDirectoryPath), Times.Once());
         }
 
@@ -32,7 +33,7 @@ namespace Tests.Unit.Services
         public void CreatePasswordFile_FileIsCreatedWithoutSpecialCharacters()
         {
             //ARRANGE
-            var fileService = new Mock<IFileService>();
+            var fileService = getFileServiceMock();
 
             string createNewFilePathParameter = "";
             fileService.Setup(fs => fs.CreateNewFile(It.IsAny<string>(), It.IsAny<string>()))
@@ -55,7 +56,7 @@ namespace Tests.Unit.Services
         public void CreatePasswordFile_FileIsCreatedWithCorrectExtension()
         {
             //ARRANGE
-            var fileService = new Mock<IFileService>();
+            var fileService = getFileServiceMock();
 
             string createNewFilePathParameter = "";
             fileService.Setup(fs => fs.CreateNewFile(It.IsAny<string>(), It.IsAny<string>()))
@@ -77,11 +78,12 @@ namespace Tests.Unit.Services
         public void CreatePasswordFile_JsonFileCreatedWithFormData()
         {
             //ARRANGE
-            var fileService = new Mock<IFileService>();
+            var fileService = getFileServiceMock();
 
             string createNewFileJsonPasswordParameter = "";
             fileService.Setup(fs => fs.CreateNewFile(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback<string, string>((filePath, fileContent) => createNewFileJsonPasswordParameter = fileContent);
+            
 
             PasswordService passwordService = new PasswordService(fileService.Object);
             
@@ -98,11 +100,12 @@ namespace Tests.Unit.Services
 
         }
 
+        //TODO: VERIFICAR A MENSAGEM DA EXCEPTION
         [TestMethod]
         public void CreatePasswordFile_ThrowsExceptionIfPasswordsIsDifferent()
         {
             //ARRANGE
-            var fileService = new Mock<IFileService>();
+            var fileService = getFileServiceMock();
 
             Password password = getFakePassword();
             password.repeatPassword = "differentPassword";
@@ -110,6 +113,14 @@ namespace Tests.Unit.Services
             //ACT & ASSERT
             PasswordService passwordService = new PasswordService(fileService.Object);
             Assert.ThrowsException<Exception>(() => passwordService.CreatePasswordFile(password));
+        }
+
+
+        private Mock<IFileService> getFileServiceMock()
+        {
+            var fileService = new Mock<IFileService>();
+            fileService.Setup(fs => fs.GetProjectRootDirectory()).Returns("C:/UnitTest");
+            return fileService;
         }
 
         private Password getFakePassword()
