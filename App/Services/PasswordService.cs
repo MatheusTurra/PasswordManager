@@ -40,7 +40,7 @@ namespace App.Services
         public string CreatePasswordsFolder()
         {
             string projectRootDirectory = fileService.GetProjectRootDirectory();
-            return projectRootDirectory + "/Assets/Passwords";
+            return Path.Combine(projectRootDirectory, "/Passwords");
         }
 
 
