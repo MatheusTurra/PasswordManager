@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -40,6 +41,90 @@ namespace App.Services
             string jsonPassword = JsonSerializer.Serialize(password);
 
             fileService.CreateNewFile(passwordFilePath, jsonPassword);
+        }
+
+        public void EncryptFile(Password password)
+        {
+            string result = String.Empty;
+            string fileName = RemoveSpecialCharacters(password.name);
+            string jsonPassword = JsonSerializer.Serialize(password);
+
+            byte[] encryptedData;
+
+            string privateKey = password.name ?? "PrivateKey";
+
+
+            using (var passwordFileStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonPassword ?? "")))
+            {
+                using (Aes aes = Aes.Create())
+                {
+                    aes.Key = GenerateKeyFromPassword(privateKey);
+                    aes.GenerateIV();
+
+                    ICryptoTransform encryptor = aes.CreateEncryptor();
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        
+                        stream.Write(aes.IV, 0, aes.IV.Length); //GRAVA O VETOR DE INICIALIZACAO NO INCIO DO ARQUIVO P/ DESCRIPTOGRAFAR DEPOIS
+
+                        using (CryptoStream cryptoStr = new CryptoStream(stream, encryptor, CryptoStreamMode.Write))
+                        {
+                            using (StreamWriter writer = new StreamWriter(cryptoStr))
+                            {
+                                writer.Write(jsonPassword);
+                            }
+
+                            encryptedData = stream.ToArray();
+                        }
+                    }
+                }
+
+               result = Convert.ToBase64String(encryptedData);
+            }
+
+            string file = decryptPasswordFile(result, privateKey);
+
+        }
+
+
+        public string decryptPasswordFile(string encryptedFile, string privateKey)
+        {
+            using (Aes aesAlgorithm = Aes.Create())
+            {
+                byte[] cipher = Convert.FromBase64String(encryptedFile);
+
+                byte[] initializationVector = new byte[aesAlgorithm.BlockSize / 8];
+                Array.Copy(cipher, 0, initializationVector, 0, initializationVector.Length);
+                aesAlgorithm.IV = initializationVector;
+
+                aesAlgorithm.Key = GenerateKeyFromPassword(privateKey);
+
+                ICryptoTransform decryptor = aesAlgorithm.CreateDecryptor();
+
+                //IGNORA O VETOR DE INICIALIZACAO COLOCADO NO COMECO DO ARQUIVO CRIPTOGRAFADO
+                byte[] cipherWithoutInitializationVector = new byte[cipher.Length - initializationVector.Length];
+                Array.Copy(cipher, initializationVector.Length, cipherWithoutInitializationVector, 0, cipherWithoutInitializationVector.Length);
+                using (MemoryStream stream = new MemoryStream(cipherWithoutInitializationVector))
+                {
+                    using (CryptoStream cryptStr = new CryptoStream(stream, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader reader = new StreamReader(cryptStr))
+                        {
+                            return reader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+        }
+
+        private static byte[] GenerateKeyFromPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                // Converte a senha para bytes e gera o hash SHA-256
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                return sha256.ComputeHash(passwordBytes);
+            }
         }
 
         public string GetPasswordsFolder()

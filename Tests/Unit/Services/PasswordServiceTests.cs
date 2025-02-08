@@ -116,6 +116,16 @@ namespace Tests.Unit.Services
         }
 
 
+        [TestMethod]
+        public void CreatePasswordFile_EncryptPasswordFileContent()
+        {
+            var fileService = getFileServiceMock();
+            PasswordService ps = new PasswordService(fileService.Object);
+
+            Password password = getFakePassword();
+            ps.EncryptFile(password);
+        }
+
         private Mock<IFileService> getFileServiceMock()
         {
             var fileService = new Mock<IFileService>();

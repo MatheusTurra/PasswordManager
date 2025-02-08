@@ -2,11 +2,26 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:App.ViewModels"
+             xmlns:tb="clr-namespace:H.NotifyIcon;assembly=H.NotifyIcon.Maui"
              x:DataType="local:MainPageViewModel"
              x:Class="App.MainPage">
 
 
     <Grid HorizontalOptions="FillAndExpand" Margin="30, 0" RowDefinitions="50, *, 50">
+        <tb:TaskbarIcon
+            IconSource="red.ico"
+            x:Name="TrayIcon"
+            NoLeftClickDelay="True"
+            >
+            <FlyoutBase.ContextFlyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem  Text="MATHEUS LIXO" />
+                    <MenuFlyoutSeparator />
+                    <MenuFlyoutItem Text="Exit" />
+                </MenuFlyout>
+            </FlyoutBase.ContextFlyout>
+        </tb:TaskbarIcon>
+        
         <Label Grid.Row="0" VerticalTextAlignment="Start" HorizontalTextAlignment="Center">Criar Senha</Label>
         <VerticalStackLayout Grid.Row="1" Spacing="15">
             <Label Text="Nome" FontSize="Medium" />
