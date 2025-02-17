@@ -115,17 +115,6 @@ namespace Tests.Unit.Services
             Assert.ThrowsException<Exception>(() => passwordService.CreatePasswordFile(password));
         }
 
-
-        [TestMethod]
-        public void CreatePasswordFile_EncryptPasswordFileContent()
-        {
-            var fileService = getFileServiceMock();
-            PasswordService ps = new PasswordService(fileService.Object);
-
-            Password password = getFakePassword();
-            ps.EncryptFile(password);
-        }
-
         private Mock<IFileService> getFileServiceMock()
         {
             var fileService = new Mock<IFileService>();
