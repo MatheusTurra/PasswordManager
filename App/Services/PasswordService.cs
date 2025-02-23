@@ -19,9 +19,11 @@ namespace App.Services
     public class PasswordService : IPasswordService
     {
         private readonly IFileService fileService;
-        public PasswordService(IFileService fileService) 
+        private readonly IEncryptionService encryptionService;
+        public PasswordService(IFileService fileService, IEncryptionService encryptionService) 
         {
             this.fileService = fileService;
+            this.encryptionService = encryptionService;
         }
 
         public void CreatePasswordFile(Password password)
@@ -31,7 +33,7 @@ namespace App.Services
                 throw new Exception("As senhas são diferentes");
             }
 
-            string passwordsFolder = GetPasswordsFolder();
+            string passwordsFolder = GetPasswordsFolder(); //TODO: EXTRAIR METODO
 
             if (!Directory.Exists(passwordsFolder))
             {
@@ -42,8 +44,9 @@ namespace App.Services
             string passwordFilePath = Path.Combine(passwordsFolder, fileName + ".pwd");
 
             string jsonPassword = JsonSerializer.Serialize(password);
-
-            fileService.CreateNewFile(passwordFilePath, jsonPassword);
+            string encryptedFileContent = encryptionService.EncryptPasswordFile(jsonPassword);
+            
+            fileService.CreateNewFile(passwordFilePath, encryptedFileContent);
         }
 
         public string GetPasswordsFolder()

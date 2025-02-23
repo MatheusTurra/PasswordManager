@@ -2,7 +2,7 @@
 
 namespace App.Services.Interfaces
 {
-    internal interface IEncryptionService
+    public interface IEncryptionService
     {
         string DecryptPasswordFile(string encryptedPassword);
         string EncryptPasswordFile(string passwordContent);

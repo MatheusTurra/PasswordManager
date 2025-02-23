@@ -26,6 +26,7 @@ namespace App
 
             builder.Services.AddScoped<IFileService, FileService>();
             builder.Services.AddScoped<IPasswordService, PasswordService>();
+            builder.Services.AddScoped<IEncryptionService, EncryptionService>();
 
 #if DEBUG
             builder.Logging.AddDebug();
