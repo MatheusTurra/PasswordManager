@@ -1,4 +1,5 @@
-﻿using App.Services;
+﻿using App.Pages;
+using App.Services;
 using App.Services.Interfaces;
 using App.ViewModels;
 using CommunityToolkit.Maui;
@@ -21,8 +22,8 @@ namespace App
                 });
 
             builder.Services.AddSingleton<AppShell>();
-            builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddSingleton<MainPageViewModel>();
+            builder.Services.AddSingleton<CreatePassword>();
+            builder.Services.AddSingleton<CreatePasswordViewModel>();
 
             builder.Services.AddScoped<IFileService, FileService>();
             builder.Services.AddScoped<IPasswordService, PasswordService>();

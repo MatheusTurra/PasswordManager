@@ -66,4 +66,10 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Pages\CreatePassword.xaml.cs">
+	    <DependentUpon>CreatePassword.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
 </Project>

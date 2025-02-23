@@ -9,7 +9,7 @@ using App.Services.Interfaces;
 
 namespace App.ViewModels
 {
-    public partial class MainPageViewModel : ObservableValidator
+    public partial class CreatePasswordViewModel : ObservableValidator
     {
         [Required(ErrorMessage = "Digite o nome do programa ou site")]
         [MinLength(2, ErrorMessage = "O nome do site ou programa deve conter mais de dois caracteres")]
@@ -34,7 +34,7 @@ namespace App.ViewModels
         public static string CurrentYear { get => DateTime.Now.Year.ToString(); }
 
         private readonly IPasswordService passwordService;
-        public MainPageViewModel(IPasswordService passwordService)
+        public CreatePasswordViewModel(IPasswordService passwordService)
         { 
             this.passwordService = passwordService;
         }
