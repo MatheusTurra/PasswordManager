@@ -17,7 +17,7 @@ namespace Tests.Unit.Services
             string projectRootDirectory = "C://ProjectRoot/";
             Mock<IFileService> fileService = new Mock<IFileService>();
             fileService.Setup(service => service.GetProjectRootDirectory()).Returns(projectRootDirectory);
-            PasswordService passwordService = getFileService(fileService);
+            PasswordService passwordService = getPasswordServiceMock(fileService);
             Password password = getFakePassword();
 
             //ACT
@@ -38,7 +38,7 @@ namespace Tests.Unit.Services
             fileService.Setup(fs => fs.CreateNewFile(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback<string, string>((filePath, fileContent) => createNewFilePathParameter = filePath);
 
-            PasswordService passwordService = getFileService(fileService);
+            PasswordService passwordService = getPasswordServiceMock(fileService);
             Password password = getFakePassword();
             password.name = "unitTéstSpecíãlCharactêrs!";
 
@@ -62,7 +62,7 @@ namespace Tests.Unit.Services
                 .Callback<string, string>((filePath, fileContent) => createNewFilePathParameter = filePath);
 
             //ACT
-            PasswordService passwordService = getFileService(fileService);
+            PasswordService passwordService = getPasswordServiceMock(fileService);
             Password password = getFakePassword();
             password.name = "unitTestFileExtension";
 
@@ -79,19 +79,24 @@ namespace Tests.Unit.Services
             //ARRANGE
             var fileService = getFileServiceMock();
 
-            string createNewFileJsonPasswordParameter = "";
+            string createNewFilePasswordParameter = "";
             fileService.Setup(fs => fs.CreateNewFile(It.IsAny<string>(), It.IsAny<string>()))
-                .Callback<string, string>((filePath, fileContent) => createNewFileJsonPasswordParameter = fileContent);
-            
+                .Callback<string, string>((filePath, fileContent) => createNewFilePasswordParameter = fileContent);
 
-            PasswordService passwordService = getFileService(fileService);
+            var encryptionService = new EncryptionService();
+
+            PasswordService passwordService = new PasswordService(fileService.Object, encryptionService);
 
             Password password = getFakePassword();
 
             //ACT
             passwordService.CreatePasswordFile(password);
 
-            var jsonPassword = JsonConvert.DeserializeObject<Password>(createNewFileJsonPasswordParameter);
+            var fileContent = encryptionService.DecryptPasswordFile(createNewFilePasswordParameter);
+
+            var jsonPassword = JsonConvert.DeserializeObject<Password>(fileContent);
+
+            //ASSERT
             Assert.AreEqual<string>(password.name, jsonPassword?.name);
             Assert.AreEqual<string>(password.user, jsonPassword?.user);
             Assert.AreEqual<string>(password.password, jsonPassword?.password);
@@ -110,7 +115,7 @@ namespace Tests.Unit.Services
             password.repeatPassword = "differentPassword";
 
             //ACT & ASSERT
-            PasswordService passwordService = getFileService(fileService);
+            PasswordService passwordService = getPasswordServiceMock(fileService);
             Assert.ThrowsException<Exception>(() => passwordService.CreatePasswordFile(password));
         }
 
@@ -121,7 +126,7 @@ namespace Tests.Unit.Services
             return fileService;
         }
         
-        private static PasswordService getFileService(Mock<IFileService> fileService)
+        private static PasswordService getPasswordServiceMock(Mock<IFileService> fileService)
         {
             Mock<IEncryptionService> encryption = new Mock<IEncryptionService>();
             return new PasswordService(fileService.Object, encryption.Object);

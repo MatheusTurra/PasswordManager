@@ -12,10 +12,6 @@ using App.Services.Interfaces;
 
 namespace App.Services
 {
-    /*
-     * TODO: REMOVER CHAMADAS ESTATICAS PARA O SISTEMA DE ARQUIVOS PARA FAZER COM QUE OS TESTES NAO FACAM CHAMADAS EXTERNAS A APLICACAO
-     *       NO CASO DA CLASSE ESTATICA DIRECTORY SERA NECESSARIO EXTRAIR TODOS OS METODOS QUE O SISTEMA CHAMA EM UMA INTERFACE SEPARADA.
-     */
     public class PasswordService : IPasswordService
     {
         private readonly IFileService fileService;
@@ -33,7 +29,7 @@ namespace App.Services
                 throw new Exception("As senhas são diferentes");
             }
 
-            string passwordsFolder = GetPasswordsFolder(); //TODO: EXTRAIR METODO
+            string passwordsFolder = GetPasswordsFolder();
 
             if (!Directory.Exists(passwordsFolder))
             {
